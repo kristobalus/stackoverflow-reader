@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="min_list_item_height">56dp</dimen>
+    <dimen name="default_horizontal_margin">20dp</dimen>
+    <dimen name="default_vertical_margin">10dp</dimen>
+</resources>

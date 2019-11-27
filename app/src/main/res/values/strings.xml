@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">stackoverflow.com reader</string>
+    <string name="close">Close</string>
+    <string name="error_api">Ups! Some error happened :(</string>
+    <string name="tags">Tags</string>
+    <string name="no_network">No internet connection found</string>
+    <string name="airplane_mode_on">Airplane mode is on.</string>
+    <string name="retry">Retry</string>
+    <string name="format_tag_count">total questions %d</string>
+</resources>
