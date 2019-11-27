@@ -12,7 +12,7 @@ import androidx.paging.PagedList;
 import com.voxtantum.soreader.ReaderApp;
 import com.voxtantum.soreader.api.entities.Tag;
 import com.voxtantum.soreader.api.services.TagService;
-import com.voxtantum.soreader.datasources.TagDataSource;
+import com.voxtantum.soreader.datasources.TagListDataSource;
 import com.voxtantum.soreader.ui.base.BaseViewModel;
 
 import java.util.concurrent.Executors;
@@ -25,7 +25,7 @@ public class TagsViewModel extends BaseViewModel {
     private LiveData<PagedList<Tag>> pagedListLiveData;
     private MediatorLiveData<Boolean> sourceLoading = new MediatorLiveData<>();
     private MediatorLiveData<Throwable> sourceError = new MediatorLiveData<>();
-    private TagDataSource.Factory sourceFactory;
+    private TagListDataSource.Factory sourceFactory;
 
     @Inject
     TagService tagService;
@@ -35,7 +35,7 @@ public class TagsViewModel extends BaseViewModel {
 
         ((ReaderApp) application).applicationComponent.inject(this);
 
-        sourceFactory = new TagDataSource.Factory(tagService);
+        sourceFactory = new TagListDataSource.Factory(tagService);
 
         sourceLoading.addSource(sourceFactory.getSourceLoading(), new Observer<Boolean>() {
             @Override
@@ -53,8 +53,8 @@ public class TagsViewModel extends BaseViewModel {
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setPageSize(TagDataSource.PAGE_SIZE)
-                .setInitialLoadSizeHint(TagDataSource.PAGE_SIZE)
+                .setPageSize(TagListDataSource.PAGE_SIZE)
+                .setInitialLoadSizeHint(TagListDataSource.PAGE_SIZE)
                 .build();
 
         pagedListLiveData = new LivePagedListBuilder<>(sourceFactory, config)

@@ -12,7 +12,7 @@ import androidx.paging.PagedList;
 import com.voxtantum.soreader.ReaderApp;
 import com.voxtantum.soreader.api.entities.Question;
 import com.voxtantum.soreader.api.services.TagService;
-import com.voxtantum.soreader.datasources.FaqDataSource;
+import com.voxtantum.soreader.datasources.QuestionListDataSource;
 import com.voxtantum.soreader.ui.base.BaseViewModel;
 
 import java.util.concurrent.Executors;
@@ -25,7 +25,7 @@ public class QuestionsViewModel extends BaseViewModel {
     private LiveData<PagedList<Question>> pagedListLiveData;
     private MediatorLiveData<Boolean> sourceLoading = new MediatorLiveData<>();
     private MediatorLiveData<Throwable> sourceError = new MediatorLiveData<>();
-    private FaqDataSource.Factory sourceFactory;
+    private QuestionListDataSource.Factory sourceFactory;
 
     @Inject
     TagService tagService;
@@ -38,7 +38,7 @@ public class QuestionsViewModel extends BaseViewModel {
 
     public void loadForTag(String selectedTag){
 
-        sourceFactory = new FaqDataSource.Factory(selectedTag, tagService);
+        sourceFactory = new QuestionListDataSource.Factory(selectedTag, tagService);
 
         sourceLoading.addSource(sourceFactory.getSourceLoading(), new Observer<Boolean>() {
             @Override
@@ -56,8 +56,8 @@ public class QuestionsViewModel extends BaseViewModel {
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setPageSize(FaqDataSource.PAGE_SIZE)
-                .setInitialLoadSizeHint(FaqDataSource.PAGE_SIZE)
+                .setPageSize(QuestionListDataSource.PAGE_SIZE)
+                .setInitialLoadSizeHint(QuestionListDataSource.PAGE_SIZE)
                 .build();
 
         pagedListLiveData = new LivePagedListBuilder<>(sourceFactory, config)
