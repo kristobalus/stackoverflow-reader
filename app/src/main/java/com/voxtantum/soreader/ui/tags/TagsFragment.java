@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.lifecycle.Observer;
@@ -160,21 +161,29 @@ public class TagsFragment extends BaseFragment {
     static class TagViewHolder extends RecyclerView.ViewHolder {
 
         AppCompatTextView nameView;
+        AppCompatImageView iconView;
         AppCompatTextView countView;
 
         TagViewHolder(@NonNull View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.name);
             countView = itemView.findViewById(R.id.count);
+            iconView = itemView.findViewById(R.id.icon);
         }
 
         void clean(){
             nameView.setText(null);
             countView.setText(null);
+            iconView.setVisibility(View.INVISIBLE);
         }
 
         void bind(Tag model){
             if ( model != null ){
+                if ( "android".equals(model.name)  ){
+                    iconView.setVisibility(View.VISIBLE);
+                } else {
+                    iconView.setVisibility(View.INVISIBLE);
+                }
                 nameView.setText(model.name != null ? Html.fromHtml(model.name) : null);
                 countView.setText(itemView.getResources().getString(R.string.format_tag_count, model.count));
             } else {
