@@ -1,6 +1,7 @@
 package com.voxtantum.soreader.ui.faq;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
@@ -40,6 +41,19 @@ public class FaqActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if ( item.getItemId() == R.id.action_refresh ){
+                    faqViewModel.invalidate();
+                }
+
+                return false;
             }
         });
 

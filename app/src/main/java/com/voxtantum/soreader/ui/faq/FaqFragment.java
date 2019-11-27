@@ -69,6 +69,8 @@ public class FaqFragment extends BaseFragment {
         adapter = new QuestionAdapter(bindingController, diffUtilCallback);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setEnabled(false);
     }
 
     @Override

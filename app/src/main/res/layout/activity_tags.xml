@@ -25,6 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/tags"
+            app:menu="@menu/refreshable"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
