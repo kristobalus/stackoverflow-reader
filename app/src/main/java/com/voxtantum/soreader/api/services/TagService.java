@@ -14,7 +14,9 @@ public interface TagService {
     @GET("tags?order=desc&sort=popular&site=stackoverflow")
     Call<Paging<Tag>> getTags(@Query("page") Integer page, @Query("pagesize") Integer pageSize);
 
-    @GET("tags/{{tag}}/faq?site=stackoverflow")
+    @GET("tags/{{tag}}/faq?site=stackoverflow&filter=withbody")
     Call<Paging<Question>> getFAQ(@Path("tag") String tag, @Query("page") Integer page, @Query("pagesize") Integer pageSize);
+
+
 
 }

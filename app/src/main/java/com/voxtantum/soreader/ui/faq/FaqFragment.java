@@ -189,7 +189,13 @@ public class FaqFragment extends BaseFragment {
                     titleView.setText( !TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title) : null);
                 }
 
-                descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    descriptionView.setText( !TextUtils.isEmpty(model.body) ? Html.fromHtml(model.body, Html.FROM_HTML_MODE_COMPACT) : null);
+                } else {
+                    descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
+                }
+
+
                 authorView.setText(model.owner != null ?
                         (!TextUtils.isEmpty(model.owner.displayName) ? Html.fromHtml(model.owner.displayName) : null) : null );
             } else {

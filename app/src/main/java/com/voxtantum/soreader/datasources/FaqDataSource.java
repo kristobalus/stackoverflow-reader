@@ -12,6 +12,8 @@ import com.voxtantum.soreader.api.entities.Question;
 import com.voxtantum.soreader.api.entities.Tag;
 import com.voxtantum.soreader.api.services.TagService;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -32,6 +34,16 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
         this.service = service;
         this.error = error;
         this.loading = loading;
+    }
+
+
+    private void loadPage(Integer page, Integer pageSize) throws IOException {
+
+        Call<Paging<Question>> call = service.getFAQ(tag, page, pageSize);
+        Response<Paging<Question>> response = call.execute();
+
+
+
     }
 
     @Override
