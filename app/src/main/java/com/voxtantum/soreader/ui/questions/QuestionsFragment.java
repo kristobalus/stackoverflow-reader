@@ -161,15 +161,17 @@ public class QuestionsFragment extends BaseFragment {
 
         QuestionViewHolder(@NonNull View itemView) {
             super(itemView);
+
             titleView = itemView.findViewById(R.id.title);
             descriptionView = itemView.findViewById(R.id.description);
             dateView = itemView.findViewById(R.id.date);
             authorView = itemView.findViewById(R.id.author);
-//            webView = itemView.findViewById(R.id.webview);
-//            webView.getSettings().setUseWideViewPort(false);
-//            webView.getSettings().setSupportZoom(false);
-//            webView.getSettings().setLoadWithOverviewMode(true);
-//            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+            webView = itemView.findViewById(R.id.webview);
+            webView.getSettings().setUseWideViewPort(false);
+            webView.getSettings().setSupportZoom(false);
+            webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         }
 
         void clean() {
@@ -182,7 +184,7 @@ public class QuestionsFragment extends BaseFragment {
         void bind(Question model) {
             if (model != null) {
 
-                if ( model.creationDate != null ){
+                if (model.creationDate != null) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeZone(TimeZone.getDefault());
                     calendar.setTimeInMillis(model.creationDate * 1000L);
@@ -192,21 +194,22 @@ public class QuestionsFragment extends BaseFragment {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    titleView.setText( !TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title, Html.FROM_HTML_MODE_COMPACT) : null);
+                    titleView.setText(!TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title, Html.FROM_HTML_MODE_COMPACT) : null);
                 } else {
-                    titleView.setText( !TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title) : null);
+                    titleView.setText(!TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title) : null);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                     descriptionView.setText( !TextUtils.isEmpty(model.body) ? Html.fromHtml(model.body, Html.FROM_HTML_MODE_COMPACT) : null);
-                } else {
-                     descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    descriptionView.setText(!TextUtils.isEmpty(model.body) ? Html.fromHtml(model.body, Html.FROM_HTML_MODE_COMPACT) : null);
+//                } else {
+//                    descriptionView.setText(model.body != null ? Html.fromHtml(model.body) : null);
+//                }
 
-                // webView.loadDataWithBaseURL("https://www.stackoverflow.com", getHtmlData(model.body), "text/html", "UTF-8", null);
+                webView.loadDataWithBaseURL("https://www.stackoverflow.com", getHtmlData(model.body), "text/html", "UTF-8", null);
 
                 authorView.setText(model.owner != null ?
-                        (!TextUtils.isEmpty(model.owner.displayName) ? Html.fromHtml(model.owner.displayName) : null) : null );
+                        (!TextUtils.isEmpty(model.owner.displayName) ? Html.fromHtml(model.owner.displayName) : null) : null);
+
             } else {
                 clean();
             }

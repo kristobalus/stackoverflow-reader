@@ -28,20 +28,20 @@
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/title"
-            android:maxLines="10"
+            android:visibility="gone"
             android:ellipsize="end"
             tools:text="description" />
 
-<!--        <WebView-->
-<!--            android:id="@+id/webview"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/date"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"-->
-<!--            app:layout_constraintStart_toStartOf="@id/guidelineStart"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/title"-->
-<!--            tools:text="description"-->
-<!--            tools:ignore="WebViewLayout" />-->
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/date"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="description"
+            tools:ignore="WebViewLayout" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/date"
