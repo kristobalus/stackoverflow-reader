@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">stackoverflow.com reader</string>
+    <string name="app_name">Stackoverflow</string>
     <string name="close">Close</string>
     <string name="error_api">Ups! Some error happened :(</string>
     <string name="tags">Tags</string>
