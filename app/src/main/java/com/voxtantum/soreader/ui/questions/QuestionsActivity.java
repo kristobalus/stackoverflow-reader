@@ -1,4 +1,4 @@
-package com.voxtantum.soreader.ui.faq;
+package com.voxtantum.soreader.ui.questions;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,7 +16,7 @@ import com.voxtantum.soreader.ui.base.BaseActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FaqActivity extends BaseActivity {
+public class QuestionsActivity extends BaseActivity {
 
     public static final String ARG_TAG = "arg_tag";
 
@@ -27,13 +27,13 @@ public class FaqActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private FaqViewModel faqViewModel;
+    private QuestionsViewModel faqViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_faq);
+        setContentView(R.layout.activity_questions);
         ButterKnife.bind(this);
 
         toolbar.setTitle(getIntent().getStringExtra(ARG_TAG));
@@ -57,7 +57,7 @@ public class FaqActivity extends BaseActivity {
             }
         });
 
-        faqViewModel = new ViewModelProvider(this).get(FaqViewModel.class);
+        faqViewModel = new ViewModelProvider(this).get(QuestionsViewModel.class);
         faqViewModel.loadForTag(getIntent().getStringExtra(ARG_TAG));
         faqViewModel.getSourceError().observe(this, this::onViewModelError);
 
@@ -70,8 +70,8 @@ public class FaqActivity extends BaseActivity {
     }
 
     private void showFaqFragment(){
-        if ( getSupportFragmentManager().findFragmentByTag("FaqFragment") == null ){
-            setCurrentFragment(FaqFragment.newInstance(),"FaqFragment" );
+        if ( getSupportFragmentManager().findFragmentByTag("QuestionsFragment") == null ){
+            setCurrentFragment(QuestionsFragment.newInstance(),"QuestionsFragment" );
         }
     }
 

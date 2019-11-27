@@ -17,7 +17,7 @@
         <activity android:name=".ui.tags.TagsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".ui.faq.FaqActivity"
+        <activity android:name=".ui.questions.QuestionsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
@@ -29,6 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.questiondetails.QuestionDetailActivity" />
 
     </application>
 

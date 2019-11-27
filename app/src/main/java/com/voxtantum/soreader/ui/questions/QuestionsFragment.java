@@ -1,4 +1,4 @@
-package com.voxtantum.soreader.ui.faq;
+package com.voxtantum.soreader.ui.questions;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -32,13 +32,13 @@ import java.util.TimeZone;
 
 import butterknife.BindView;
 
-public class FaqFragment extends BaseFragment {
+public class QuestionsFragment extends BaseFragment {
 
-    public static FaqFragment newInstance() {
+    public static QuestionsFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        FaqFragment fragment = new FaqFragment();
+        QuestionsFragment fragment = new QuestionsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +53,7 @@ public class FaqFragment extends BaseFragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
     QuestionAdapter adapter;
-    FaqViewModel viewModel;
+    QuestionsViewModel viewModel;
 
 
     @Nullable
@@ -77,7 +77,7 @@ public class FaqFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(FaqViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(QuestionsViewModel.class);
         viewModel.getIsSourceLoading().observe(getViewLifecycleOwner(), this::onSourceLoading);
         viewModel.getQuestionList().observe(getViewLifecycleOwner(), new Observer<PagedList<Question>>() {
             @Override

@@ -1,4 +1,4 @@
-package com.voxtantum.soreader.ui.faq;
+package com.voxtantum.soreader.ui.questions;
 
 import android.app.Application;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 @SuppressWarnings("WeakerAccess")
-public class FaqViewModel extends BaseViewModel {
+public class QuestionsViewModel extends BaseViewModel {
 
     private LiveData<PagedList<Question>> pagedListLiveData;
     private MediatorLiveData<Boolean> sourceLoading = new MediatorLiveData<>();
@@ -30,7 +30,7 @@ public class FaqViewModel extends BaseViewModel {
     @Inject
     TagService tagService;
 
-    public FaqViewModel(@NonNull Application application) {
+    public QuestionsViewModel(@NonNull Application application) {
         super(application);
 
         ((ReaderApp) application).applicationComponent.inject(this);

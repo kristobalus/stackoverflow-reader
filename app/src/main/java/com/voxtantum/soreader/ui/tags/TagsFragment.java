@@ -25,7 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.voxtantum.soreader.R;
 import com.voxtantum.soreader.api.entities.Tag;
 import com.voxtantum.soreader.ui.base.BaseFragment;
-import com.voxtantum.soreader.ui.faq.FaqActivity;
+import com.voxtantum.soreader.ui.questions.QuestionsActivity;
 
 import butterknife.BindView;
 
@@ -126,8 +126,8 @@ public class TagsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(requireActivity(), FaqActivity.class);
-                    intent.putExtra(FaqActivity.ARG_TAG, model.name);
+                    Intent intent = new Intent(requireActivity(), QuestionsActivity.class);
+                    intent.putExtra(QuestionsActivity.ARG_TAG, model.name);
                     startActivity(intent);
                 }
             });
