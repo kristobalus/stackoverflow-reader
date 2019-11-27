@@ -17,6 +17,11 @@ public interface TagService {
     @GET("tags/{{tag}}/faq?site=stackoverflow&filter=withbody")
     Call<Paging<Question>> getFAQ(@Path("tag") String tag, @Query("page") Integer page, @Query("pagesize") Integer pageSize);
 
+    @GET("search/advanced?site=stackoverflow&&filter=withbody&order=desc")
+    Call<Paging<Question>> searchAdvanced(@Query("tagged") String tag, @Query("page") Integer page, @Query("pagesize") Integer pageSize);
+
+
+
 
 
 }

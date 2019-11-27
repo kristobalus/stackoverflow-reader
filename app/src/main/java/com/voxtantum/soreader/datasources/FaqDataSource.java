@@ -37,25 +37,19 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
     }
 
 
-    private void loadPage(Integer page, Integer pageSize) throws IOException {
-
-        Call<Paging<Question>> call = service.getFAQ(tag, page, pageSize);
-        Response<Paging<Question>> response = call.execute();
-
-
-
+    private Response<Paging<Question>> loadPage(Integer page, Integer pageSize) throws IOException {
+        Call<Paging<Question>> call = service.searchAdvanced(tag, page, pageSize);
+        return call.execute();
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Question> callback) {
 
-        Call<Paging<Question>> call = service.getFAQ(tag, firstPage, params.requestedLoadSize);
-
         try {
 
             loading.postValue(true);
 
-            Response<Paging<Question>> response = call.execute();
+            Response<Paging<Question>> response = loadPage(firstPage, params.requestedLoadSize);
             if (!response.isSuccessful()) {
                 throw new ApiException(response.code(), response.message(), response.errorBody());
             }
@@ -75,13 +69,12 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Question> callback) {
 
-        Call<Paging<Question>> call = service.getFAQ(tag, params.key, params.requestedLoadSize);
 
         try {
 
             loading.postValue(true);
 
-            Response<Paging<Question>> response = call.execute();
+            Response<Paging<Question>> response = loadPage(params.key, params.requestedLoadSize);
             if (!response.isSuccessful()) {
                 throw new ApiException(response.code(), response.message(), response.errorBody());
             }
@@ -100,13 +93,12 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Question> callback) {
 
-        Call<Paging<Question>> call = service.getFAQ(tag, params.key, params.requestedLoadSize);
 
         try {
 
             loading.postValue(true);
 
-            Response<Paging<Question>> response = call.execute();
+            Response<Paging<Question>> response = loadPage(params.key, params.requestedLoadSize);
             if (!response.isSuccessful()) {
                 throw new ApiException(response.code(), response.message(), response.errorBody());
             }
