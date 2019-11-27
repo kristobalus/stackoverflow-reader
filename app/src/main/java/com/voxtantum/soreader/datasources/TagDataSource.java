@@ -42,7 +42,7 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
 
             Response<Paging<Tag>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -68,7 +68,7 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
 
             Response<Paging<Tag>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -93,7 +93,7 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
 
             Response<Paging<Tag>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -114,6 +114,7 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
         private MutableLiveData<Throwable> sourceError = new MutableLiveData<>();
         private MutableLiveData<Boolean> sourceLoading = new MutableLiveData<>();
         private TagService service;
+        private DataSource<Integer, Tag> source;
 
         public Factory(TagService service){
             this.service = service;
@@ -124,7 +125,8 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
         public DataSource<Integer, Tag> create() {
             sourceError.postValue(null);
             sourceLoading.postValue(null);
-            return new TagDataSource(service, sourceLoading, sourceError);
+            source = new TagDataSource(service, sourceLoading, sourceError);
+            return source;
         }
 
         public LiveData<Boolean> getSourceLoading(){
@@ -133,6 +135,10 @@ public class TagDataSource extends PageKeyedDataSource<Integer, Tag> {
 
         public LiveData<Throwable> getSourceError(){
             return this.sourceError;
+        }
+
+        public DataSource<Integer, Tag> getSource() {
+            return source;
         }
 
     }

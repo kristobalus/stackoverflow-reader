@@ -7,7 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.squareup.otto.Subscribe;
 import com.voxtantum.soreader.R;
+import com.voxtantum.soreader.events.InvalidateDataSourceEvent;
 import com.voxtantum.soreader.ui.base.BaseActivity;
 
 import butterknife.BindView;
@@ -24,7 +26,7 @@ public class FaqActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private FaqViewModel listViewModel;
+    private FaqViewModel faqViewModel;
 
 
     @Override
@@ -41,9 +43,9 @@ public class FaqActivity extends BaseActivity {
             }
         });
 
-        listViewModel = new ViewModelProvider(this).get(FaqViewModel.class);
-        listViewModel.loadForTag(getIntent().getStringExtra(ARG_TAG));
-        listViewModel.getSourceError().observe(this, this::onViewModelError);
+        faqViewModel = new ViewModelProvider(this).get(FaqViewModel.class);
+        faqViewModel.loadForTag(getIntent().getStringExtra(ARG_TAG));
+        faqViewModel.getSourceError().observe(this, this::onViewModelError);
 
         showFaqFragment();
     }
@@ -59,8 +61,10 @@ public class FaqActivity extends BaseActivity {
         }
     }
 
-
-
+    @Subscribe()
+    public  void onInvalidateDataSourceEvent(InvalidateDataSourceEvent event){
+        faqViewModel.invalidate();
+    }
 
 
 }

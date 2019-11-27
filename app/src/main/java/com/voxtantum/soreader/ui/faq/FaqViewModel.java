@@ -25,6 +25,7 @@ public class FaqViewModel extends BaseViewModel {
     private LiveData<PagedList<Question>> pagedListLiveData;
     private MediatorLiveData<Boolean> sourceLoading = new MediatorLiveData<>();
     private MediatorLiveData<Throwable> sourceError = new MediatorLiveData<>();
+    private FaqDataSource.Factory sourceFactory;
 
     @Inject
     TagService tagService;
@@ -37,7 +38,7 @@ public class FaqViewModel extends BaseViewModel {
 
     public void loadForTag(String selectedTag){
 
-        final FaqDataSource.Factory sourceFactory = new FaqDataSource.Factory(selectedTag, tagService);
+        sourceFactory = new FaqDataSource.Factory(selectedTag, tagService);
 
         sourceLoading.addSource(sourceFactory.getSourceLoading(), new Observer<Boolean>() {
             @Override
@@ -75,6 +76,10 @@ public class FaqViewModel extends BaseViewModel {
 
     public LiveData<Throwable> getSourceError() {
         return sourceError;
+    }
+
+    public void invalidate() {
+        sourceFactory.getSource().invalidate();
     }
 
 }

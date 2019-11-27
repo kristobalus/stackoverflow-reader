@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.voxtantum.soreader.ReaderApp;
 import com.voxtantum.soreader.api.base.ApiException;
 import com.voxtantum.soreader.helpers.NetworkUtil;
 import com.voxtantum.soreader.ui.errors.AirplaneModeFragment;
@@ -34,9 +35,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ReaderApp.getMessageBus().register(this);
+
         networkChangeFilter.addAction(ACTION_NETWORK_CHANGE);
         networkChangeFilter.addAction(ACTION_WIFI_CHANGED);
         networkChangeFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ReaderApp.getMessageBus().unregister(this);
     }
 
     @Override
@@ -93,7 +102,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void showApiErrorFragment(ApiException apiException) {
         if (getSupportFragmentManager().findFragmentByTag("ApiErrorFragment") == null) {
-            setCurrentFragment(ApiErrorFragment.newInstance(apiException.httpCode, apiException.body), "ApiErrorFragment");
+            setCurrentFragment(ApiErrorFragment.newInstance(apiException), "ApiErrorFragment");
         }
     }
 

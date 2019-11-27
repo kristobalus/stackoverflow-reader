@@ -3,6 +3,7 @@ package com.voxtantum.soreader.ui.tags;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.voxtantum.soreader.R;
 import com.voxtantum.soreader.api.entities.Tag;
@@ -37,9 +39,11 @@ public class TagsFragment extends BaseFragment {
         return fragment;
     }
 
-
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBarView;
@@ -77,8 +81,6 @@ public class TagsFragment extends BaseFragment {
 
         viewModel.getIsSourceLoading().observe(getViewLifecycleOwner(), this::onSourceLoading);
 
-
-
         viewModel.getPagedListTags().observe(getViewLifecycleOwner(), new Observer<PagedList<Tag>>() {
             @Override
             public void onChanged(PagedList<Tag> tags) {
@@ -86,7 +88,13 @@ public class TagsFragment extends BaseFragment {
             }
         });
 
-
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                viewModel.invalidate();
+            }
+        });
     }
 
     private void onSourceLoading(Boolean isLoading) {
@@ -165,7 +173,7 @@ public class TagsFragment extends BaseFragment {
 
         void bind(Tag model){
             if ( model != null ){
-                nameView.setText(model.name);
+                nameView.setText(model.name != null ? Html.fromHtml(model.name) : null);
                 countView.setText(itemView.getResources().getString(R.string.format_tag_count, model.count));
             } else {
                 clean();

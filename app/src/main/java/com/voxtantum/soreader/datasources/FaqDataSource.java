@@ -45,7 +45,7 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
 
             Response<Paging<Question>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -71,7 +71,7 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
 
             Response<Paging<Question>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -96,7 +96,7 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
 
             Response<Paging<Question>> response = call.execute();
             if (!response.isSuccessful()) {
-                throw new ApiException(response.code(), response.message());
+                throw new ApiException(response.code(), response.message(), response.errorBody());
             }
 
             loading.postValue(false);
@@ -118,6 +118,7 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
         private MutableLiveData<Boolean> sourceLoading = new MutableLiveData<>();
         private TagService service;
         private String tag;
+        private DataSource<Integer, Question> source;
 
         public Factory(String tag, TagService service){
             this.service = service;
@@ -127,9 +128,10 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
         @NonNull
         @Override
         public DataSource<Integer, Question> create() {
+            source = new FaqDataSource(tag, service, sourceLoading, sourceError);
             sourceError.postValue(null);
             sourceLoading.postValue(null);
-            return new FaqDataSource(tag, service, sourceLoading, sourceError);
+            return source;
         }
 
         public LiveData<Boolean> getSourceLoading(){
@@ -138,6 +140,10 @@ public class FaqDataSource extends PageKeyedDataSource<Integer, Question> {
 
         public LiveData<Throwable> getSourceError(){
             return this.sourceError;
+        }
+
+        public DataSource<Integer, Question> getSource(){
+            return source;
         }
 
     }

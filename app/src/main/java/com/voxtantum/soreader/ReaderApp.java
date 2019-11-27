@@ -41,5 +41,9 @@ public class ReaderApp extends Application {
         return instance.applicationComponent;
     }
 
+    public static Bus getMessageBus() {
+        return instance.messageBus;
+    }
+
 
 }

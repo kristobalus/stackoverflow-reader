@@ -25,6 +25,7 @@ public class TagsViewModel extends BaseViewModel {
     private LiveData<PagedList<Tag>> pagedListLiveData;
     private MediatorLiveData<Boolean> sourceLoading = new MediatorLiveData<>();
     private MediatorLiveData<Throwable> sourceError = new MediatorLiveData<>();
+    private TagDataSource.Factory sourceFactory;
 
     @Inject
     TagService tagService;
@@ -34,7 +35,7 @@ public class TagsViewModel extends BaseViewModel {
 
         ((ReaderApp) application).applicationComponent.inject(this);
 
-        final TagDataSource.Factory sourceFactory = new TagDataSource.Factory(tagService);
+        sourceFactory = new TagDataSource.Factory(tagService);
 
         sourceLoading.addSource(sourceFactory.getSourceLoading(), new Observer<Boolean>() {
             @Override
@@ -75,5 +76,8 @@ public class TagsViewModel extends BaseViewModel {
         return sourceError;
     }
 
+    public void invalidate() {
+        sourceFactory.getSource().invalidate();
+    }
 
 }

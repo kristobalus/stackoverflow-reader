@@ -11,20 +11,22 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.voxtantum.soreader.R;
+import com.voxtantum.soreader.ReaderApp;
+import com.voxtantum.soreader.api.base.ApiException;
+import com.voxtantum.soreader.events.InvalidateDataSourceEvent;
 import com.voxtantum.soreader.ui.base.BaseFragment;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ApiErrorFragment extends BaseFragment {
 
-    private static final String ARG_HTTP_CODE = "arg_http_code";
-    private static final String ARG_BODY = "arg_body";
+    private static final String ARG_EXCEPTION = "arg_exception";
 
-    public static ApiErrorFragment newInstance(Integer httpCode, String body) {
+    public static ApiErrorFragment newInstance(ApiException err) {
 
         Bundle args = new Bundle();
-        args.putString(ARG_BODY, body);
-        args.putInt(ARG_HTTP_CODE, httpCode);
+        args.putSerializable(ARG_EXCEPTION, err);
 
         ApiErrorFragment fragment = new ApiErrorFragment();
         fragment.setArguments(args);
@@ -48,10 +50,22 @@ public class ApiErrorFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Integer httpCode = getArguments().getInt(ARG_HTTP_CODE);
-        String body = getArguments().getString(ARG_BODY);
-        codeView.setText(httpCode != null ? String.valueOf(httpCode) : null);
+
+        ApiException err = (ApiException) getArguments().getSerializable(ARG_EXCEPTION);
+
+        String code = String.valueOf(err.httpCode);
+        String body = err.message;
+        if ( err.error != null ){
+            body = err.error.errorMessage;
+        }
+
+        codeView.setText(code);
         bodyView.setText(body);
+    }
+
+    @OnClick(R.id.button_retry)
+    public void onRetryClicked(){
+        ReaderApp.getMessageBus().post(new InvalidateDataSourceEvent());
     }
 
 }

@@ -1,6 +1,9 @@
 package com.voxtantum.soreader.ui.faq;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.voxtantum.soreader.R;
 import com.voxtantum.soreader.api.entities.Question;
@@ -44,6 +48,9 @@ public class FaqFragment extends BaseFragment {
 
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar progressBarView;
+
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     QuestionAdapter adapter;
     FaqViewModel viewModel;
@@ -77,17 +84,20 @@ public class FaqFragment extends BaseFragment {
             }
         });
 
-
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                viewModel.invalidate();
+            }
+        });
     }
-
-
 
     private void onSourceLoading(Boolean isLoading) {
         if (isLoading != null) {
             progressBarView.setVisibility(isLoading ? View.VISIBLE : View.INVISIBLE);
         }
     }
-
 
     private DiffUtil.ItemCallback<Question> diffUtilCallback = new DiffUtil.ItemCallback<Question>() {
         @Override
@@ -137,7 +147,7 @@ public class FaqFragment extends BaseFragment {
 
     static class QuestionViewHolder extends RecyclerView.ViewHolder {
 
-        static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        static SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm", Locale.getDefault());
 
         AppCompatTextView titleView;
         AppCompatTextView descriptionView;
@@ -171,9 +181,15 @@ public class FaqFragment extends BaseFragment {
                     dateView.setText(null);
                 }
 
-                titleView.setText(model.title);
-                descriptionView.setText(model.body);
-                authorView.setText(model.owner != null ? model.owner.displayName : null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    titleView.setText( !TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title, Html.FROM_HTML_MODE_COMPACT) : null);
+                } else {
+                    titleView.setText( !TextUtils.isEmpty(model.title) ? Html.fromHtml(model.title) : null);
+                }
+
+                descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
+                authorView.setText(model.owner != null ?
+                        (!TextUtils.isEmpty(model.owner.displayName) ? Html.fromHtml(model.owner.displayName) : null) : null );
             } else {
                 clean();
             }
