@@ -172,6 +172,11 @@ public class QuestionsFragment extends BaseFragment {
             webView.getSettings().setSupportZoom(false);
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                webView.getSettings().setOffscreenPreRaster(true);
+            }
+            webView.setVerticalScrollBarEnabled(false);
+            webView.setScrollbarFadingEnabled(false);
         }
 
         void clean() {

@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.voxtantum.soreader.R;
 import com.voxtantum.soreader.ReaderApp;
 import com.voxtantum.soreader.api.base.ApiException;
 import com.voxtantum.soreader.helpers.NetworkUtil;
@@ -52,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(networkChangeReceiver, networkChangeFilter);
+        checkNetworkStatus();
     }
 
     @Override
@@ -65,35 +69,51 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.currentFragment = fragment;
         this.currentFragmentTag = fragmentTag;
 
-        if (isNetworkAvailable) {
+        if (isNetworkAvailable && !isAirplaneMode) {
             FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
             tr.replace(getFragmentContainerId(), currentFragment, fragmentTag);
             tr.commit();
         }
     }
 
+    protected void addOverlayView(){
+        if ( findViewById(R.id.overlay_container) == null ){
+            FrameLayout rootLayout = findViewById(android.R.id.content);
+            View.inflate(this, R.layout.overlay_layout, rootLayout);
+        }
+    }
+
+    protected void removeOverlayView(){
+        if ( findViewById(R.id.overlay_container) != null ) {
+            FrameLayout rootLayout = findViewById(android.R.id.content);
+            rootLayout.removeViewAt(rootLayout.getChildCount() - 1);
+        }
+    }
+
     protected void showNoNetworkFragment() {
 
-        if (getSupportFragmentManager().findFragmentByTag("NoNetworkFragment") == null) {
+        addOverlayView();
 
-            FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
-            tr.replace(getFragmentContainerId(), NoNetworkFragment.newInstance(), "NoNetworkFragment");
-            tr.commit();
-        }
+        FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+        tr.replace(R.id.overlay_container, NoNetworkFragment.newInstance());
+        tr.commit();
     }
 
     protected void showAirplaneModeFragment() {
 
-        if (getSupportFragmentManager().findFragmentByTag("AirplaneModeFragment") == null) {
+        addOverlayView();
 
-            FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
-            tr.replace(getFragmentContainerId(), AirplaneModeFragment.newInstance(), "AirplaneModeFragment");
-            tr.commit();
-        }
+        FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
+        tr.replace(R.id.overlay_container, AirplaneModeFragment.newInstance());
+        tr.commit();
     }
 
     protected void showCurrentFragment() {
+
         if (currentFragment != null) {
+
+            removeOverlayView();
+
             FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
             tr.replace(getFragmentContainerId(), currentFragment, currentFragmentTag);
             tr.commit();
@@ -106,24 +126,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void checkNetworkStatus(){
+
+        isAirplaneMode = Settings.System.getInt(getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) == 1;
+        isNetworkAvailable = !(NetworkUtil.getConnectivityStatus(this) == NetworkUtil.TYPE_NOT_CONNECTED);
+
+        if (isAirplaneMode) {
+            showAirplaneModeFragment();
+        } else if (!isNetworkAvailable) {
+            showNoNetworkFragment();
+        } else {
+            showCurrentFragment();
+        }
+    }
+
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
-                isAirplaneMode = Settings.System.getInt(context.getContentResolver(),
-                        Settings.Global.AIRPLANE_MODE_ON, 0) == 1;
-            } else {
-                isNetworkAvailable = !(NetworkUtil.getConnectivityStatus(context) == NetworkUtil.TYPE_NOT_CONNECTED);
-            }
-
-            if (isAirplaneMode) {
-                showAirplaneModeFragment();
-            } else if (!isNetworkAvailable) {
-                showNoNetworkFragment();
-            } else {
-                showCurrentFragment();
-            }
+            checkNetworkStatus();
         }
     };
 

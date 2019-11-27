@@ -57,7 +57,7 @@ public class ApiErrorFragment extends BaseFragment {
         ApiException err = (ApiException) getArguments().getSerializable(ARG_EXCEPTION);
 
         codeView.setText(String.valueOf(err.httpCode));
-        bodyView.setText(err.error.errorMessage);
+        bodyView.setText(err.error != null ? err.error.errorMessage : null);
         messageView.setText(err.message);
     }
 
