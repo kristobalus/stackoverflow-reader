@@ -165,11 +165,11 @@ public class QuestionsFragment extends BaseFragment {
             descriptionView = itemView.findViewById(R.id.description);
             dateView = itemView.findViewById(R.id.date);
             authorView = itemView.findViewById(R.id.author);
-            webView = itemView.findViewById(R.id.webview);
-            webView.getSettings().setUseWideViewPort(false);
-            webView.getSettings().setSupportZoom(false);
-            webView.getSettings().setLoadWithOverviewMode(true);
-            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//            webView = itemView.findViewById(R.id.webview);
+//            webView.getSettings().setUseWideViewPort(false);
+//            webView.getSettings().setSupportZoom(false);
+//            webView.getSettings().setLoadWithOverviewMode(true);
+//            webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         }
 
         void clean() {
@@ -198,12 +198,12 @@ public class QuestionsFragment extends BaseFragment {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    // descriptionView.setText( !TextUtils.isEmpty(model.body) ? Html.fromHtml(model.body, Html.FROM_HTML_MODE_COMPACT) : null);
+                     descriptionView.setText( !TextUtils.isEmpty(model.body) ? Html.fromHtml(model.body, Html.FROM_HTML_MODE_COMPACT) : null);
                 } else {
-                    // descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
+                     descriptionView.setText( model.body != null ? Html.fromHtml(model.body) : null);
                 }
 
-                webView.loadDataWithBaseURL("https://www.stackoverflow.com", getHtmlData(model.body), "text/html", "UTF-8", null);
+                // webView.loadDataWithBaseURL("https://www.stackoverflow.com", getHtmlData(model.body), "text/html", "UTF-8", null);
 
                 authorView.setText(model.owner != null ?
                         (!TextUtils.isEmpty(model.owner.displayName) ? Html.fromHtml(model.owner.displayName) : null) : null );

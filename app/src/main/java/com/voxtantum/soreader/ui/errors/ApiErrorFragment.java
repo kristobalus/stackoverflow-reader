@@ -36,6 +36,9 @@ public class ApiErrorFragment extends BaseFragment {
     @BindView(R.id.code)
     AppCompatTextView codeView;
 
+    @BindView(R.id.message)
+    AppCompatTextView messageView;
+
     @BindView(R.id.body)
     AppCompatTextView bodyView;
 
@@ -53,14 +56,9 @@ public class ApiErrorFragment extends BaseFragment {
 
         ApiException err = (ApiException) getArguments().getSerializable(ARG_EXCEPTION);
 
-        String code = String.valueOf(err.httpCode);
-        String body = err.message;
-        if ( err.error != null ){
-            body = err.error.errorMessage;
-        }
-
-        codeView.setText(code);
-        bodyView.setText(body);
+        codeView.setText(String.valueOf(err.httpCode));
+        bodyView.setText(err.error.errorMessage);
+        messageView.setText(err.message);
     }
 
     @OnClick(R.id.button_retry)
